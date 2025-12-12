@@ -81,10 +81,31 @@ constexpr auto visitor = overload{
         auto addr = isa::ctxt();
         auto c = dcd_instr_T<1>(i);
 
+
         auto encode = [&](auto &&v, auto &&s) { *addr |= v << s; };
 
         zip_with(encode, x, std::get<0>(shift));
         zip_with(encode, c, std::get<1>(shift));
+    },
+    []<typename T, typename U> requires(same<T, decltype(SW)> &&same<U, instr_s>)(T x, U i) {
+        SHIFT(std::tuple{12, 0}, std::tuple{20, 15});
+        auto addr = isa::ctxt();
+        auto c = dcd_instr_T<1>(i);
+        auto& tmp = std::get<1>(c);
+        if (tmp & 0b1111'111'111) {
+            *addr |= tmp & 0b11111;
+            *addr <<= 7;
+            *addr |= ((tmp>>5) & 0b1111111 ) << 25;
+        }
+        else
+            throw std::runtime_error("");
+
+        auto mod = std::tuple{i.xs2, i.imm2};;
+
+        auto encode = [&](auto &&v, auto &&s) { *addr |= v << s; };
+
+        zip_with(encode, x, std::get<0>(shift));
+        zip_with(encode, mod, std::get<1>(shift));
     },
     [](auto, auto) {},
 };
