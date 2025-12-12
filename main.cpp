@@ -25,7 +25,7 @@ int main()
     std::variant<instr_r, instr_i, instr_s> v;
     for (auto it = 0; begin != end; ++it) {
         phrase_parse(begin, end, parser, x3::ascii::space, v);
-        std::visit(visitor, isa::f[std::visit(dcd_instr_T<0>, v)], v);
+        std::visit(visitor, isa::f[std::visit(instr_binding_V<0>, v)], v);
         std::cout << isa::machine[it] << "\n";
     }
 }
