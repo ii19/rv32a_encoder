@@ -69,7 +69,7 @@ constexpr auto visitor = overload{
         || (same<T, decltype(ADD)> &&same<U, instr_r>) )(T x, U i) {
         SHIFT(std::tuple{25, 12, 0}, std::tuple{7, 15, 20});
         auto addr = isa::ctxt();
-        auto c = dcd_instr_T<1>(i);
+        auto c = instr_binding_V<1>(i);
 
         auto encode = [&](auto &&v, auto &&s) { *addr |= v << s; };
 
@@ -79,7 +79,7 @@ constexpr auto visitor = overload{
     []<typename T, typename U> requires(same<T, decltype(ADDI)> &&same<U, instr_i>)(T x, U i) {
         SHIFT(std::tuple{12, 0}, std::tuple{7, 15, 20});
         auto addr = isa::ctxt();
-        auto c = dcd_instr_T<1>(i);
+        auto c = instr_binding_V<1>(i);
 
 
         auto encode = [&](auto &&v, auto &&s) { *addr |= v << s; };
@@ -90,7 +90,7 @@ constexpr auto visitor = overload{
     []<typename T, typename U> requires(same<T, decltype(SW)> &&same<U, instr_s>)(T x, U i) {
         SHIFT(std::tuple{12, 0}, std::tuple{20, 15});
         auto addr = isa::ctxt();
-        auto c = dcd_instr_T<1>(i);
+        auto c = instr_binding_V<1>(i);
         auto& tmp = std::get<1>(c);
         if (tmp & 0b1111'111'111) {
             *addr |= tmp & 0b11111;
