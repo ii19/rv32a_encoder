@@ -1,8 +1,6 @@
 #ifndef RISCV_ENCODER_INSTRUCTIONS_FORMAT_H
 #define RISCV_ENCODER_INSTRUCTIONS_FORMAT_H
 
-#include "header.hpp"
-
 struct instr_r
 {
     unsigned opcode;
